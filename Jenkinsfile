@@ -25,6 +25,32 @@ pipeline {
     }
 
     stages {
+        stage('Install SonarScanner') {
+            steps {
+                script {
+                    sh '''
+                        # Descargar la última versión de SonarScanner
+                        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+                        
+                        # Extraer el archivo descargado
+                        unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+                        
+                        # Mover el SonarScanner a una ubicación estándar
+                        mv sonar-scanner-4.6.2.2472-linux sonar-scanner
+
+                        # Establecer permisos de ejecución
+                        chmod +x sonar-scanner/bin/sonar-scanner
+
+                        # Agregar SonarScanner al PATH temporalmente
+                        export PATH=$PATH:`pwd`/sonar-scanner/bin
+
+                        # Verificar la instalación de SonarScanner
+                        sonar-scanner --version
+                    '''
+                }
+            }
+        }
+        
         stage('Verify Tools') {
             steps {
                 sh 'node -v'
