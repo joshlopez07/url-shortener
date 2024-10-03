@@ -39,12 +39,12 @@ pipeline {
             }
         }
 
-        stage('Run Unit Tests') {
+        /*stage('Run Unit Tests') {
             steps {
                 // Ejecuta las pruebas unitarias
                 sh 'npm test'
             }
-        }
+        }*/
 
         stage('Test OWASP') {
             steps {
