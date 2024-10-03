@@ -52,15 +52,15 @@ pipeline {
                 sh '''
                     # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
                     rm -rf dependency-check
-    
+
                     # Descargar e instalar dependency-check
                     wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
-                    
+
                     # Descomprimir el archivo ZIP y listar la estructura de directorios
                     unzip -o dependency-check-6.5.3-release.zip
                     echo "Contenido del directorio después de la descompresión:"
                     ls -R dependency-check
-                    
+
                     # Asegurarse de que el binario tenga permisos de ejecución
                     chmod +x dependency-check/bin/dependency-check || true
                     export PATH=$PATH:`pwd`/dependency-check/bin
@@ -72,7 +72,15 @@ pipeline {
 
                 sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
                 // Si tienes OWASP Dependency Check configurado para Node.js, puedes agregar lo siguiente
-                sh './dependency-check/bin/dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
+                //sh './dependency-check/bin/dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
+                // Ejecutar dependency-check usando el script dependency-check.sh
+                sh '''
+                    if [ -f "dependency-check/bin/dependency-check.sh" ]; then
+                        ./dependency-check/bin/dependency-check.sh --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}
+                    else
+                        echo "El script dependency-check.sh no se encontró en la ubicación esperada."
+                    fi
+                '''
                 dependencyCheck additionalArguments: ''' 
                     -o './'
                     -s './'
