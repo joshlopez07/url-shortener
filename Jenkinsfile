@@ -48,7 +48,7 @@ pipeline {
 
         stage('Test OWASP') {
             steps {
-                withEnv(['NVD_API_KEY=c04ad272-f369-4fc3-9171-820a44bfb756']) {
+                /*withEnv(['NVD_API_KEY=c04ad272-f369-4fc3-9171-820a44bfb756']) {
                 sh '''
                     # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
                     rm -rf dependency-check
@@ -68,7 +68,7 @@ pipeline {
                 '''
                 }
                 // Instalar dependency-check de forma dinámica en Jenkins
-                /*sh '''
+                sh '''
                     # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
                     rm -rf dependency-check
 
@@ -100,6 +100,7 @@ pipeline {
                         echo "El script dependency-check.sh no se encontró en la ubicación esperada."
                     fi
                 '''*/
+                sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
                 dependencyCheck additionalArguments: ''' 
                     -o './'
                     -s './'
