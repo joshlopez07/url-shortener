@@ -18,6 +18,7 @@ pipeline {
         JMETER_HOME = '/opt/jmeter'  // Ruta donde está instalado JMeter
         JMETER_JMX = 'meli-test.jmx'                // Nombre del archivo .jmx
         RESULTS_DIR = 'jmeter_results'
+        PATH = "${env.PATH}:${env.WORKSPACE}/sonar-scanner/bin"
     }
 
     tools {
@@ -50,7 +51,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Verify Tools') {
             steps {
                 sh 'node -v'
