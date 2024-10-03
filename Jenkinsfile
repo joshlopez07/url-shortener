@@ -48,8 +48,17 @@ pipeline {
 
         stage('Test OWASP') {
             steps {
+                sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
+                // Si tienes OWASP Dependency Check configurado para Node.js, puedes agregar lo siguiente
+                sh 'dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
+                dependencyCheck additionalArguments: ''' 
+                    -o './'
+                    -s './'
+                    -f 'ALL' 
+                    --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
                 // Opcional: Realiza un análisis de seguridad con OWASP Dependency-Check
-                sh "dependency-check --project 'NodeApp' --format 'ALL' --out './owasp-report' --scan './' --nvd-api-key ${NVD_API_KEY}"
+                //sh "dependency-check --project 'NodeApp' --format 'ALL' --out './owasp-report' --scan './' --nvd-api-key ${NVD_API_KEY}"
             }
         }
 
