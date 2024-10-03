@@ -16,8 +16,12 @@ pipeline {
         SERVICE_NAME = 'meli-test' // Nombre del servicio en Cloud Run
         NVD_API_KEY = 'c04ad272-f369-4fc3-9171-820a44bfb756'
         JMETER_HOME = '/opt/jmeter'  // Ruta donde está instalado JMeter
-        JMETER_JMX = 'demo-devops-java.jmx'                // Nombre del archivo .jmx
+        JMETER_JMX = 'meli-test.jmx'                // Nombre del archivo .jmx
         RESULTS_DIR = 'jmeter_results'
+    }
+
+    tools {
+        nodejs "NodeJS_20.15.0"
     }
 
     stages {
