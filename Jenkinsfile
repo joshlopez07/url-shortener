@@ -48,9 +48,15 @@ pipeline {
 
         stage('Test OWASP') {
             steps {
+                // Instalar dependency-check de forma dinámica en Jenkins
+                sh '''
+                    wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
+                    unzip dependency-check-6.5.3-release.zip
+                    export PATH=$PATH:`pwd`/dependency-check/bin
+                '''
                 sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
                 // Si tienes OWASP Dependency Check configurado para Node.js, puedes agregar lo siguiente
-                sh 'dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
+                sh './dependency-check/bin/dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
                 dependencyCheck additionalArguments: ''' 
                     -o './'
                     -s './'
