@@ -48,8 +48,27 @@ pipeline {
 
         stage('Test OWASP') {
             steps {
-                // Instalar dependency-check de forma dinámica en Jenkins
+                withEnv(['NVD_API_KEY=c04ad272-f369-4fc3-9171-820a44bfb756']) {
                 sh '''
+                    # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
+                    rm -rf dependency-check
+
+                    # Descargar e instalar dependency-check
+                    wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
+                    
+                    # Descomprimir el archivo ZIP y configurar permisos
+                    unzip -o dependency-check-6.5.3-release.zip
+                    chmod +x dependency-check/bin/dependency-check.sh
+
+                    # Ejecutar npm audit para verificar vulnerabilidades en Node.js
+                    npm audit --audit-level=high
+
+                    # Ejecutar dependency-check sin la opción --nvdApiKey
+                    ./dependency-check/bin/dependency-check.sh --project "meli-test" --out ./dependency-check-report.html --scan ./ --format ALL --prettyPrint
+                '''
+                }
+                // Instalar dependency-check de forma dinámica en Jenkins
+                /*sh '''
                     # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
                     rm -rf dependency-check
 
@@ -80,7 +99,7 @@ pipeline {
                     else
                         echo "El script dependency-check.sh no se encontró en la ubicación esperada."
                     fi
-                '''
+                '''*/
                 dependencyCheck additionalArguments: ''' 
                     -o './'
                     -s './'
