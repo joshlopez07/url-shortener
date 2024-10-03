@@ -21,11 +21,18 @@ pipeline {
     }
 
     tools {
-        nodejs "NodeJS_20.15.0",
+        nodejs 'NodeJS_20.15.0'
         sonarScanner 'SonarScanner'
     }
 
     stages {
+        stage('Verify Tools') {
+            steps {
+                sh 'node -v'
+                sh 'npm -v'
+                sh 'sonar-scanner -v'
+            }
+        }
         stage('Clone Code') {
             steps {
                 // Clona el repositorio de GitHub usando las credenciales
