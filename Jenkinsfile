@@ -50,11 +50,21 @@ pipeline {
             steps {
                 // Instalar dependency-check de forma dinámica en Jenkins
                 sh '''
+                    # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
+                    rm -rf dependency-check
+    
+                    # Descargar e instalar dependency-check
                     wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
-                    unzip -o dependency-check-6.5.3-release.zip  # Sobrescribir archivos existentes
-                    chmod +x dependency-check/bin/dependency-check
+                    
+                    # Descomprimir el archivo ZIP y listar la estructura de directorios
+                    unzip -o dependency-check-6.5.3-release.zip
+                    echo "Contenido del directorio después de la descompresión:"
+                    ls -R dependency-check
+                    
+                    # Asegurarse de que el binario tenga permisos de ejecución
+                    chmod +x dependency-check/bin/dependency-check || true
                     export PATH=$PATH:`pwd`/dependency-check/bin
-                    echo "PATH: $PATH"
+                    echo "PATH actualizado: $PATH"
                 '''
 
                 // Verificar los permisos y la existencia del binario
