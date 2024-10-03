@@ -22,7 +22,6 @@ pipeline {
 
     tools {
         nodejs 'NodeJS_20.15.0'
-        sonarScanner 'SonarScanner'
     }
 
     stages {
