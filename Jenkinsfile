@@ -22,6 +22,7 @@ pipeline {
 
     tools {
         nodejs "NodeJS_20.15.0"
+        sonarScanner 'SonarScanner'
     }
 
     stages {
@@ -105,7 +106,8 @@ pipeline {
                     -o './'
                     -s './'
                     -f 'ALL' 
-                    --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                    --prettyPrint
+                ''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
                 // Opcional: Realiza un análisis de seguridad con OWASP Dependency-Check
                 //sh "dependency-check --project 'NodeApp' --format 'ALL' --out './owasp-report' --scan './' --nvd-api-key ${NVD_API_KEY}"
@@ -116,7 +118,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('SonarCloud') {
-                        sh 'sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.organization=${SONAR_ORG} -Dsonar.sources=./src -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN'
+                        sh 'sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.organization=${SONAR_ORG} -Dsonar.sources=./ -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN'
                     }
                 }
             }
