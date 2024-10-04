@@ -20,6 +20,7 @@ pipeline {
         JMETER_JMX = 'meli-test.jmx'                // Nombre del archivo .jmx
         RESULTS_DIR = 'jmeter_results'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}:${env.WORKSPACE}/sonar-scanner/bin"
+        SONAR_SCANNER_OPTS = "-Djava.home=${JAVA_HOME}"
         //PATH = "${env.PATH}:${env.WORKSPACE}/sonar-scanner/bin"
     }
 
