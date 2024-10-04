@@ -60,7 +60,6 @@ pipeline {
                 sh 'node -v'
                 sh 'npm -v'
                 sh 'sonar-scanner -v'
-                sh 'echo "Sonar Token: $SONAR_TOKEN"'
                 sh 'echo "Java Home: $JAVA_HOME"'
                 sh 'java -version'
             }
@@ -106,15 +105,12 @@ pipeline {
                 script {
                     withSonarQubeEnv('SonarCloud') {
                         withCredentials([string(credentialsId: 'SonarCloud_Token', variable: 'SONAR_TOKEN')]) {
-                            sh '''
-                                export JAVA_HOME=${JAVA_HOME}
-                                export PATH=${JAVA_HOME}/bin:${PATH}
-                                ${env.WORKSPACE}/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                                                                                  -Dsonar.organization=${SONAR_ORG} \
-                                                                                  -Dsonar.sources=./src \
-                                                                                  -Dsonar.host.url=https://sonarcloud.io \
-                                                                                  -Dsonar.login=${SONAR_TOKEN}
-                            '''
+                            sh 'sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                                              -Dsonar.organization=${SONAR_ORG} \
+                                              -Dsonar.sources=./src \
+                                              -Dsonar.host.url=https://sonarcloud.io \
+                                              -Dsonar.login=${SONAR_TOKEN}
+                            '
                         }
                     }
                 }
