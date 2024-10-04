@@ -110,9 +110,9 @@ pipeline {
                                 export PATH=${JAVA_HOME}/bin:${PATH}
                                 sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                                               -Dsonar.organization=${SONAR_ORG} \
-                                              -Dsonar.sources=./src \
+                                              -Dsonar.sources=. \
                                               -Dsonar.host.url=https://sonarcloud.io \
-                                              -Dsonar.login=${SONAR_TOKEN}
+                                              -Dsonar.login=${SONAR_TOKEN} 
                             '''
                         }
                     }
