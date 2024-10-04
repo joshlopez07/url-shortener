@@ -26,7 +26,7 @@ pipeline {
     }
 
     stages {
-        stage('Install SonarScanner') {
+        /*stage('Install SonarScanner') {
             steps {
                 script {
                     sh '''
@@ -50,7 +50,7 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
 
         stage('Verify Tools') {
             steps {
