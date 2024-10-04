@@ -136,11 +136,12 @@ pipeline {
                     // Autenticarse con GCP usando las credenciales en el archivo JSON
                     withCredentials([file(credentialsId: "${GOOGLE_APPLICATION_CREDENTIALS}", variable: 'GOOGLE_CREDENTIALS')]) {
                         sh 'gcloud auth activate-service-account --key-file=$GOOGLE_CREDENTIALS'
-                        sh 'gcloud auth configure-docker'
+                        sh 'gcloud auth configure-docker us-central1-docker.pkg.dev'
+                        // Empuja la imagen a Google Container Registry (GCR)
+                        sh "docker push ${DOCKER_IMAGE}"
                     }
 
-                    // Empuja la imagen a Google Container Registry (GCR)
-                    sh "docker push ${DOCKER_IMAGE}"
+                    
                 }
             }
         }
