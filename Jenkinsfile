@@ -105,12 +105,15 @@ pipeline {
                 script {
                     withSonarQubeEnv('SonarCloud') {
                         withCredentials([string(credentialsId: 'SonarCloud_Token', variable: 'SONAR_TOKEN')]) {
-                            sh 'sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                            sh '''
+                                export JAVA_HOME=${JAVA_HOME}
+                                export PATH=${JAVA_HOME}/bin:${PATH}
+                                sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                                               -Dsonar.organization=${SONAR_ORG} \
                                               -Dsonar.sources=./src \
                                               -Dsonar.host.url=https://sonarcloud.io \
                                               -Dsonar.login=${SONAR_TOKEN}
-                            '
+                            '''
                         }
                     }
                 }
