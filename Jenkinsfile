@@ -9,6 +9,7 @@ pipeline {
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         SONAR_PROJECT_KEY = 'joshlopez07_meli-test-url-shortener'
         SONAR_ORG = 'Joseph_Lopez'
+        SONAR_TOKEN = 'SonarCloud_Token'
         DOCKER_IMAGE = "us-central1-docker.pkg.dev/doaas-project/doaas/meli-test:0.0.3" // Repositorio en GCR de Google Cloud
         //DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
         GOOGLE_APPLICATION_CREDENTIALS = 'gcp-credentials-json' // ID del archivo de credenciales de GCP en Jenkins
@@ -16,9 +17,9 @@ pipeline {
         GCP_REGION = 'us-central1' // Región donde desplegar Cloud Run
         SERVICE_NAME = 'meli-test' // Nombre del servicio en Cloud Run
         NVD_API_KEY = 'c04ad272-f369-4fc3-9171-820a44bfb756'
-        JMETER_HOME = '/opt/jmeter'  // Ruta donde está instalado JMeter
-        JMETER_JMX = 'meli-test.jmx'                // Nombre del archivo .jmx
-        RESULTS_DIR = 'jmeter_results'
+        //JMETER_HOME = '/opt/jmeter'  // Ruta donde está instalado JMeter
+        //JMETER_JMX = 'meli-test.jmx'                // Nombre del archivo .jmx
+        //RESULTS_DIR = 'jmeter_results'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}:${env.WORKSPACE}/sonar-scanner/bin"
         //PATH = "${env.PATH}:${env.WORKSPACE}/sonar-scanner/bin"
     }
