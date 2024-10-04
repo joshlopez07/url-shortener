@@ -33,13 +33,13 @@ pipeline {
                 script {
                     sh '''
                         # Descargar la última versión de SonarScanner
-                        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux.zip
+                        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.0.0.4432-linux.zip
 
                         # Extraer el archivo descargado
-                        unzip sonar-scanner-cli-6.2.1.4610-linux.zip
+                        unzip sonar-scanner-cli-6.0.0.4432-linux.zip
                         
                         # Mover el SonarScanner a una ubicación estándar
-                        mv sonar-scanner-6.2.1.4610-linux sonar-scanner
+                        mv sonar-scanner-6.0.0.4432-linux sonar-scanner
 
                         # Establecer permisos de ejecución
                         chmod +x sonar-scanner/bin/sonar-scanner
