@@ -8,7 +8,7 @@ pipeline {
         OWASP_REPORT_PATH = 'owasp-report.html'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         SONAR_PROJECT_KEY = 'joshlopez07_meli-test-url-shortener'
-        SONAR_ORG = 'Joseph_Lopez'
+        SONAR_ORG = 'joshlopez07'
         SONAR_TOKEN = 'SonarCloud_Token'
         DOCKER_IMAGE = "us-central1-docker.pkg.dev/doaas-project/doaas/meli-test:0.0.3" // Repositorio en GCR de Google Cloud
         //DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
