@@ -7,7 +7,7 @@ pipeline {
         GITHUB_CREDENTIALS = 'github_credentials'
         OWASP_REPORT_PATH = 'owasp-report.html'
         SONAR_PROJECT_KEY = 'joshlopez07_meli-test-url-shortener'
-        SONAR_ORG = 'Joseph López'
+        SONAR_ORG = 'Joseph_Lopez'
         DOCKER_IMAGE = "us-central1-docker.pkg.dev/doaas-project/doaas/meli-test:0.0.3" // Repositorio en GCR de Google Cloud
         //DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
         GOOGLE_APPLICATION_CREDENTIALS = 'gcp-credentials-json' // ID del archivo de credenciales de GCP en Jenkins
