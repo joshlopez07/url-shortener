@@ -29,7 +29,7 @@ pipeline {
     }
 
     stages {
-        stage('Install SonarScanner') {
+        /*stage('Install SonarScanner') {
             steps {
                 script {
                     sh '''
@@ -53,13 +53,14 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
 
         stage('Verify Tools') {
             steps {
                 sh 'node -v'
                 sh 'npm -v'
                 sh 'sonar-scanner -v'
+                sh 'echo "Sonar Token: $SONAR_TOKEN"'
                 sh 'echo "Java Home: $JAVA_HOME"'
                 sh 'java -version'
             }
@@ -87,58 +88,6 @@ pipeline {
 
         stage('Test OWASP') {
             steps {
-                /*withEnv(['NVD_API_KEY=c04ad272-f369-4fc3-9171-820a44bfb756']) {
-                sh '''
-                    # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
-                    rm -rf dependency-check
-
-                    # Descargar e instalar dependency-check
-                    wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
-                    
-                    # Descomprimir el archivo ZIP y configurar permisos
-                    unzip -o dependency-check-6.5.3-release.zip
-                    chmod +x dependency-check/bin/dependency-check.sh
-
-                    # Ejecutar npm audit para verificar vulnerabilidades en Node.js
-                    npm audit --audit-level=high
-
-                    # Ejecutar dependency-check sin la opción --nvdApiKey
-                    ./dependency-check/bin/dependency-check.sh --project "meli-test" --out ./dependency-check-report.html --scan ./ --format ALL --prettyPrint
-                '''
-                }
-                // Instalar dependency-check de forma dinámica en Jenkins
-                sh '''
-                    # Eliminar cualquier directorio existente de dependency-check para evitar conflictos
-                    rm -rf dependency-check
-
-                    # Descargar e instalar dependency-check
-                    wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip
-
-                    # Descomprimir el archivo ZIP y listar la estructura de directorios
-                    unzip -o dependency-check-6.5.3-release.zip
-                    echo "Contenido del directorio después de la descompresión:"
-                    ls -R dependency-check
-
-                    # Asegurarse de que el binario tenga permisos de ejecución
-                    chmod +x dependency-check/bin/dependency-check || true
-                    export PATH=$PATH:`pwd`/dependency-check/bin
-                    echo "PATH actualizado: $PATH"
-                '''
-
-                // Verificar los permisos y la existencia del binario
-                sh 'ls -la dependency-check/bin'
-
-                sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
-                // Si tienes OWASP Dependency Check configurado para Node.js, puedes agregar lo siguiente
-                //sh './dependency-check/bin/dependency-check --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}'
-                // Ejecutar dependency-check usando el script dependency-check.sh
-                sh '''
-                    if [ -f "dependency-check/bin/dependency-check.sh" ]; then
-                        ./dependency-check/bin/dependency-check.sh --project "meli-test" --out ./dependency-check-report.html --scan ./ --nvdApiKey ${NVD_API_KEY}
-                    else
-                        echo "El script dependency-check.sh no se encontró en la ubicación esperada."
-                    fi
-                '''*/
                 sh 'npm audit --audit-level=high'  // Realiza un escaneo de seguridad con npm audit
                 dependencyCheck additionalArguments: ''' 
                     -o './'
