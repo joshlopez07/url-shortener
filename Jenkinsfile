@@ -6,6 +6,7 @@ pipeline {
         BRANCH = 'main'
         GITHUB_CREDENTIALS = 'github_credentials'
         OWASP_REPORT_PATH = 'owasp-report.html'
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         SONAR_PROJECT_KEY = 'joshlopez07_meli-test-url-shortener'
         SONAR_ORG = 'Joseph_Lopez'
         DOCKER_IMAGE = "us-central1-docker.pkg.dev/doaas-project/doaas/meli-test:0.0.3" // Repositorio en GCR de Google Cloud
@@ -57,6 +58,7 @@ pipeline {
                 sh 'node -v'
                 sh 'npm -v'
                 sh 'sonar-scanner -v'
+                sh 'java -version'
             }
         }
         stage('Clone Code') {
