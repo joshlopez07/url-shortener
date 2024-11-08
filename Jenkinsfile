@@ -24,35 +24,10 @@ pipeline {
     }
 
     tools {
-        nodejs 'NodeJS_20.15.0'
+        nodejs '20.15.0'
     }
 
     stages {
-        /*stage('Install SonarScanner') {
-            steps {
-                script {
-                    sh '''
-                        # Descargar la última versión de SonarScanner
-                        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.0.0.4432-linux.zip
-
-                        # Extraer el archivo descargado
-                        unzip sonar-scanner-cli-6.0.0.4432-linux.zip
-                        
-                        # Mover el SonarScanner a una ubicación estándar
-                        mv sonar-scanner-6.0.0.4432-linux sonar-scanner
-
-                        # Establecer permisos de ejecución
-                        chmod +x sonar-scanner/bin/sonar-scanner
-
-                        # Agregar SonarScanner al PATH temporalmente
-                        export PATH=$PATH:`pwd`/sonar-scanner/bin
-
-                        # Verificar la instalación de SonarScanner
-                        sonar-scanner --version
-                    '''
-                }
-            }
-        }*/
 
         stage('Verify Tools') {
             steps {
@@ -105,8 +80,6 @@ pipeline {
                     withSonarQubeEnv('SonarCloud') {
                         withCredentials([string(credentialsId: 'SonarCloud_Token', variable: 'SONAR_TOKEN')]) {
                             sh '''
-                                export JAVA_HOME=${JAVA_HOME}
-                                export PATH=${JAVA_HOME}/bin:${PATH}
                                 sonar-scanner -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                                               -Dsonar.organization=${SONAR_ORG} \
                                               -Dsonar.sources=. \
