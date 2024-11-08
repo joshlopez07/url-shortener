@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GIT_REPO = 'https://github.com/joshlopez07/url-shortener.git'
-        BRANCH = 'main'
+        BRANCH = 'master'
         GITHUB_CREDENTIALS = 'github_credentials'
         OWASP_REPORT_PATH = 'owasp-report.html'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
