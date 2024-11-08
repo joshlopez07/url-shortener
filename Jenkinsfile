@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GIT_REPO = 'https://github.com/joshlopez07/meli-test-url-shortener.git'
+        GIT_REPO = 'https://github.com/joshlopez07/url-shortener.git'
         BRANCH = 'main'
         GITHUB_CREDENTIALS = 'github_credentials'
         OWASP_REPORT_PATH = 'owasp-report.html'
