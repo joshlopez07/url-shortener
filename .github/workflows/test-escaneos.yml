@@ -10,19 +10,19 @@ on:
       VERSION-IMAGE-SECRET:
         description: 'version de descarga secret scan'
         required: true
-        default: 'a93da57'
+        default: '96f90cb'
       VERSION-IMAGE-SCA: 
         description: 'version de descarga sca'
         required: true
-        default: '25d3449'
+        default: '3a8442c'
       VERSION-IMAGE-SAST:
         description: 'version de descarga sast'
         required: true
-        default: '861003c'
+        default: 'a1bc742'
       VERSION-IMAGE-CODE-REVIEW:
         description: 'version de descarga code review'
         required: true
-        default: 'feature-cris'
+        default: '6933935'
       SEVERITY-THRESHOLD:
         description: 'Nivel minimo de severidad para fallar el pipeline'
         type: choice
@@ -70,8 +70,8 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
-            -e PYTHONPATH=/app \
-            --workdir /app \
+            -e PYTHONPATH=/ \
+            --workdir / \
             ${{ env.REGISTRY_BASE }}/secrets-scanner:${{ inputs.VERSION-IMAGE-SECRET }} \
             scan /src --output /tmp/scan_results/scan_resultado_secrets_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -91,7 +91,7 @@ jobs:
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
             -e PYTHONPATH=/ \
-            --workdir /app \
+            --workdir / \
             ${{ env.REGISTRY_BASE }}/sca-scanner:${{ inputs.VERSION-IMAGE-SCA }} \
             scan /src --output scan_resultado_dependencias_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -111,7 +111,7 @@ jobs:
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
             -e PYTHONPATH=/ \
-            --workdir /app \
+            --workdir / \
             ${{ env.REGISTRY_BASE }}/sast-scanner:${{ inputs.VERSION-IMAGE-SAST }} \
             scan /src --output scan_resultado_sast_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -131,7 +131,7 @@ jobs:
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
             -e PYTHONPATH=/ \
-            --workdir /app \
+            --workdir / \
             ${{ env.REGISTRY_BASE }}/code-review-scanner:${{ inputs.VERSION-IMAGE-CODE-REVIEW }} \
             scan /src --output scan_resultado_code-review_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
