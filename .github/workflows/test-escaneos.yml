@@ -70,8 +70,8 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
-            -e PYTHONPATH=/src \
-            --workdir /src \
+            -e PYTHONPATH=/app \
+            --workdir /app \
             ${{ env.REGISTRY_BASE }}/secrets-scanner:${{ inputs.VERSION-IMAGE-SECRET }} \
             scan /src --output /tmp/scan_results/scan_resultado_secrets_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -90,8 +90,8 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
-            -e PYTHONPATH=/ \
-            --workdir /src \
+            -e PYTHONPATH=/app \
+            --workdir /app \
             ${{ env.REGISTRY_BASE }}/sca-scanner:${{ inputs.VERSION-IMAGE-SCA }} \
             scan /src --output scan_resultado_dependencias_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -110,8 +110,8 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
-            -e PYTHONPATH=/ \
-            --workdir /src \
+            -e PYTHONPATH=/app \
+            --workdir /app \
             ${{ env.REGISTRY_BASE }}/sast-scanner:${{ inputs.VERSION-IMAGE-SAST }} \
             scan /src --output scan_resultado_sast_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
@@ -130,8 +130,8 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -v /tmp/scan_results:/tmp/scan_results \
-            -e PYTHONPATH=/ \
-            --workdir /src \
+            -e PYTHONPATH=/app \
+            --workdir /app \
             ${{ env.REGISTRY_BASE }}/code-review-scanner:${{ inputs.VERSION-IMAGE-CODE-REVIEW }} \
             scan /src --output scan_resultado_code-review_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
 
