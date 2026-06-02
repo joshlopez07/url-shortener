@@ -10,19 +10,19 @@ on:
       VERSION-IMAGE-SECRET:
         description: 'version de descarga secret scan'
         required: true
-        default: '96f90cb'
+        default: 'feature-cris'
       VERSION-IMAGE-SCA: 
         description: 'version de descarga sca'
         required: true
-        default: '3a8442c'
+        default: 'feature-cris'
       VERSION-IMAGE-SAST:
         description: 'version de descarga sast'
         required: true
-        default: 'a1bc742'
+        default: 'feature-cris'
       VERSION-IMAGE-CODE-REVIEW:
         description: 'version de descarga code review'
         required: true
-        default: '6933935'
+        default: 'feature-cris'
       SEVERITY-THRESHOLD:
         description: 'Nivel minimo de severidad para fallar el pipeline'
         type: choice
