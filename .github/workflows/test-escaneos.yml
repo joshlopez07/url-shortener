@@ -1,0 +1,145 @@
+name: Build and Test repo-test-scans
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      VERSION-IMAGE-SECRET:
+        description: 'version de descarga secret scan'
+        required: true
+        default: 'a93da57'
+      VERSION-IMAGE-SCA: 
+        description: 'version de descarga sca'
+        required: true
+        default: '25d3449'
+      VERSION-IMAGE-SAST:
+        description: 'version de descarga sast'
+        required: true
+        default: '861003c'
+      VERSION-IMAGE-CODE-REVIEW:
+        description: 'version de descarga code review'
+        required: true
+        default: 'feature-cris'
+      SEVERITY-THRESHOLD:
+        description: 'Nivel minimo de severidad para fallar el pipeline'
+        type: choice
+        required: true
+        default: 'low'
+        options:
+          - critical
+          - high
+          - medium
+          - low
+       
+
+env:
+  REGISTRY_BASE: 'us-central1-docker.pkg.dev/doaas-project/security-scans'
+  REGISTRY_HOST: 'us-central1-docker.pkg.dev'
+  SCAN_TIMESTAMP: ''
+
+jobs:
+  security-scans:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker for GCP
+        run: gcloud auth configure-docker ${{ env.REGISTRY_HOST }} --quiet
+
+      - name: Create scan results directory with write permissions and set timestamp
+        run: |
+          mkdir -p /tmp/scan_results
+          chmod 777 /tmp/scan_results
+          echo "SCAN_TIMESTAMP=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+
+      - name: Run Secrets Scan
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            -v /tmp/scan_results:/tmp/scan_results \
+            -e PYTHONPATH=/app \
+            --workdir /app \
+            ${{ env.REGISTRY_BASE }}/secrets-scanner:${{ inputs.VERSION-IMAGE-SECRET }} \
+            scan /src --output /tmp/scan_results/scan_resultado_secrets_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
+
+      # - name: Upload Secrets Artifact
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: secrets-report
+      #     #path: /tmp/scan_results/scan_resultado_secrets_${{ env.SCAN_TIMESTAMP }}.json
+      #     path: /tmp/scan_results
+      #     if-no-files-found: warn
+
+      - name: Run SCA Scan
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            -v /tmp/scan_results:/tmp/scan_results \
+            -e PYTHONPATH=/ \
+            --workdir /app \
+            ${{ env.REGISTRY_BASE }}/sca-scanner:${{ inputs.VERSION-IMAGE-SCA }} \
+            scan /src --output scan_resultado_dependencias_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
+
+      # - name: Upload SCA Artifact
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: sca-report
+      #     #path: /tmp/scan_results/scan_resultado_dependencias_${{ env.SCAN_TIMESTAMP }}.json
+      #     path: /tmp/scan_results
+      #     if-no-files-found: warn
+
+      - name: Run SAST Scan
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            -v /tmp/scan_results:/tmp/scan_results \
+            -e PYTHONPATH=/ \
+            --workdir /app \
+            ${{ env.REGISTRY_BASE }}/sast-scanner:${{ inputs.VERSION-IMAGE-SAST }} \
+            scan /src --output scan_resultado_sast_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
+
+      # - name: Upload SAST Artifact
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: sast-report
+      #     #path: /tmp/scan_results/scan_resultado_sast_${{ env.SCAN_TIMESTAMP }}.json
+      #     path: /tmp/scan_results
+      #     if-no-files-found: warn
+
+      - name: Run Code Review
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            -v /tmp/scan_results:/tmp/scan_results \
+            -e PYTHONPATH=/ \
+            --workdir /app \
+            ${{ env.REGISTRY_BASE }}/code-review-scanner:${{ inputs.VERSION-IMAGE-CODE-REVIEW }} \
+            scan /src --output scan_resultado_code-review_${{ env.SCAN_TIMESTAMP }}.json --severity-threshold ${{ inputs.SEVERITY-THRESHOLD }}
+
+      - name: Upload Code Review Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-review-report
+          #path: /tmp/scan_results/scan_resultado_code-review_${{ env.SCAN_TIMESTAMP }}.json
+          path: /tmp/scan_results
+          if-no-files-found: warn
