@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: url-shortener-vm
+  name: url-shortener-gke
   labels:
-    app: url-shortener-vm
+    app: url-shortener-gke
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: url-shortener-vm
+      app: url-shortener-gke
   template:
     metadata:
       labels:
-        app: url-shortener-vm
+        app: url-shortener-gke
     spec:
       containers:
-        - name: url-shortener-vm
-          image: nginx:stable
+        - name: url-shortener-gke
+          image: us-central1-docker.pkg.dev/doaas-project/doaas/url-shortener-gke:latest
           ports:
             - containerPort: 3000
           env:
